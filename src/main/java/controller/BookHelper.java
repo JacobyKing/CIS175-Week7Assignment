@@ -1,5 +1,6 @@
 package controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,90 +11,81 @@ import javax.persistence.TypedQuery;
 import model.Book;
 
 /**
- * @author stephaniesink - sisink
+ * @author stephaniesink - sisink, jacoby - jking11@dmacc.edu
  * CIS175 - Spring 2022
  * Feb 28, 2023
  */
 public class BookHelper {
-	static EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("WebBookList");
+static EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("CIS175-JPAJoinMiniProject");
 	
-	public void insertBook(Book li) {
+	public BookHelper() {}
+	public void insertBook(Book b) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		em.persist(li);
+		em.persist(b);
 		em.getTransaction().commit();
 		em.close();
 	}
-	
-	public List<Book> showAllBooks() {
+	public List<Book> showAllBooks(){
 		EntityManager em = emfactory.createEntityManager();
-		@SuppressWarnings("unchecked")
-		List<Book> allBooks = em.createQuery("SELECT i from Book i").getResultList();
+		List<Book> allBooks = em.createQuery("SELECT i FROM Book i").getResultList();
 		return allBooks;
-
 	}
-	
 	public void deleteBook(Book toDelete) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		TypedQuery<Book> typedQuery = em.createQuery("select li from Author li where li.bookId = :selectedBookId and li.title = :selectedTitle and li.isbn = :selectedIsbn", Book.class);
-
-		typedQuery.setParameter("selectedBookId", toDelete.getBookId());
+		TypedQuery<Book> typedQuery = em.createQuery("select b from Book b where b.title = :selectedTitle and b.isbn = :selectedIsbn and b.publishDate = :selectedPublishDate", Book.class);
 		typedQuery.setParameter("selectedTitle", toDelete.getTitle());
 		typedQuery.setParameter("selectedIsbn", toDelete.getIsbn());
-
+		typedQuery.setParameter("selectedPublishDate", toDelete.getPublishDate());
 		typedQuery.setMaxResults(1);
-
 		Book result = typedQuery.getSingleResult();
-
 		em.remove(result);
 		em.getTransaction().commit();
 		em.close();
 	}
-	
-	public void updateBook(Book toEdit) {
+	public List<Book> searchForBookByTitle(String titleSelected) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		em.merge(toEdit);
-		em.getTransaction().commit();
+		TypedQuery<Book> typedQuery = em.createQuery("select b from Book b where b.title = :selectedTitle", Book.class);
+		typedQuery.setParameter("selectedTitle", titleSelected);
+		List<Book> foundBooks = typedQuery.getResultList();
 		em.close();
+		return foundBooks;
 	}
-	
-	public Book searchForBookById(int idToEdit) {
+	public List<Book> searchForBookByIsbn(int isbnSelected) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		
-		Book found = em.find(Book.class, idToEdit);
+		TypedQuery<Book> typedQuery = em.createQuery("select b from Book b where b.isbn = :selectedIsbn", Book.class);
+		typedQuery.setParameter("selectedIsbn", isbnSelected);
+		List<Book> foundBooks = typedQuery.getResultList();
+		em.close();
+		return foundBooks;
+	}
+	public List<Book> searchForBookByPublishDate(LocalDate publishDateSelected) {
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		TypedQuery<Book> typedQuery = em.createQuery("select b from Book b where b.publishDate = :selectedPublishDate", Book.class);
+		typedQuery.setParameter("selectedPublishDate", publishDateSelected);
+		List<Book> foundBooks = typedQuery.getResultList();
+		em.close();
+		return foundBooks;
+	}
+	public Book searchForBookById(int idSelected) {
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		Book found = em.find(Book.class, idSelected);
 		em.close();
 		return found;
 	}
-	
-	public List<Book> searchForBookByTitle(String title) {
+	public void updateBook(Book toUpdate) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		TypedQuery<Book> typedQuery = em.createQuery("select li from Book li where li.title = :selectedTitle", Book.class);
-		
-		typedQuery.setParameter("selectedTitle", title);
-		
-		List<Book> foundItems = typedQuery.getResultList();
+		em.merge(toUpdate);
+		em.getTransaction().commit();
 		em.close();
-		return foundItems;
 	}
-	
-	public List<Book> searchForAuthorByLastName(String isbn) {
-		EntityManager em = emfactory.createEntityManager();
-		em.getTransaction().begin();
-		TypedQuery<Book> typedQuery = em.createQuery("select li from Book li where li.isbn = :selectedIsbn", Book.class);
-		
-		typedQuery.setParameter("selectedIsbn", isbn);
-		
-		List<Book> foundItems = typedQuery.getResultList();
-		em.close();
-		return foundItems;
-	}
-	
-	public void cleanUp() {
+	public void cleanUp(){
 		emfactory.close();
 	}
-
 }

@@ -16,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.CascadeOnDelete;
+
 @Entity 
 @Table(name = "authors")
 public class Author {
@@ -27,8 +29,8 @@ public class Author {
 	private String firstName;
 	@Column(name = "LAST_NAME")
 	private String lastName;
-	@OneToMany(cascade=CascadeType.MERGE, fetch=FetchType.EAGER)
-	@Column(name = "TITLES_AUTHORED")
+	@OneToMany(targetEntity=Book.class, cascade={CascadeType.MERGE, CascadeType.REFRESH}, fetch=FetchType.EAGER)
+	@CascadeOnDelete
 	private List<Book> titlesAuthored;
 	
 	public Author(String firstName, String lastName, List<Book> titlesAuthored) {

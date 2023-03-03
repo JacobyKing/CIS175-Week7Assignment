@@ -23,17 +23,17 @@ public class Book {
 	@Column(name = "TITLE")
 	private String title;
 	@Column(name = "ISBN")
-	private String isbn;
+	private int isbn;
 	@Column(name = "PUBLISH_DATE")
 	private LocalDate publishDate;
 	
-	public Book(String title, String isbn, LocalDate publishDate) {
+	public Book(String title, int isbn, LocalDate publishDate) {
 		super();
 		this.title = title;
 		this.isbn = isbn;
 		this.publishDate = publishDate;
 	}
-	public Book(String title, String isbn) {
+	public Book(String title, int isbn) {
 		super();
 		this.title = title;
 		this.isbn = isbn;
@@ -57,10 +57,10 @@ public class Book {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getIsbn() {
+	public int getIsbn() {
 		return isbn;
 	}
-	public void setIsbn(String isbn) {
+	public void setIsbn(int isbn) {
 		this.isbn = isbn;
 	}
 	public LocalDate getPublishDate() {

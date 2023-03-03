@@ -13,34 +13,25 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/viewAllAuthorsServlet")
 public class ViewAllAuthorsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+    
     public ViewAllAuthorsServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		AuthorHelper dao = new AuthorHelper();
 		request.setAttribute("allAuthors", dao.showAllAuthors());
-		String path = "/ "; //will need to add jsp file name
-		if(dao.showAllAuthors().isEmpty()) {
-			path = "/index.html";
+		String emptyMessage = "";
+		if(dao.showAllAuthors().isEmpty()){
+			emptyMessage = "There are currently no authors in the table.";
 		}
-		getServletContext().getRequestDispatcher(path).forward(request, response);
+		request.setAttribute("emptyMessage", emptyMessage);
+		BookHelper daoForBooks = new BookHelper();
+		request.setAttribute("allBooks", daoForBooks.showAllBooks());
+		getServletContext().getRequestDispatcher("/view-authors.jsp").forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }

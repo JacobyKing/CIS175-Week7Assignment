@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ViewAllAuthorServlet
+ * Servlet implementation class ViewAllBookServlet
  */
-@WebServlet("/viewAllAuthorServlet")
-public class ViewAllAuthorServlet extends HttpServlet {
+@WebServlet("/viewAllBooksServlet")
+public class ViewAllBooksServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ViewAllAuthorServlet() {
+    public ViewAllBooksServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -26,10 +26,10 @@ public class ViewAllAuthorServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AuthorHelper dao = new AuthorHelper();
-		request.setAttribute("allAuthors", dao.showAllAuthors());
+		BookHelper dao = new BookHelper();
+		request.setAttribute("allBooks", dao.showAllBooks());
 		String path = "/ "; //will need to add jsp file name
-		if(dao.showAllAuthors().isEmpty()) {
+		if(dao.showAllBooks().isEmpty()) {
 			path = "/index.html";
 		}
 		getServletContext().getRequestDispatcher(path).forward(request, response);

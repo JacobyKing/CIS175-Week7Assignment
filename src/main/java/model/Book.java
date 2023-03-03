@@ -19,21 +19,21 @@ public class Book {
 	@Id
 	@GeneratedValue
 	@Column(name = "BOOK_ID")
-	private int bookId;
+	private int bookId; 
 	@Column(name = "TITLE")
 	private String title;
 	@Column(name = "ISBN")
-	private int isbn;
+	private String isbn;
 	@Column(name = "PUBLISH_DATE")
 	private LocalDate publishDate;
 	
-	public Book(String title, int isbn, LocalDate publishDate) {
+	public Book(String title, String isbn, LocalDate publishDate) {
 		super();
 		this.title = title;
 		this.isbn = isbn;
 		this.publishDate = publishDate;
 	}
-	public Book(String title, int isbn) {
+	public Book(String title, String isbn) {
 		super();
 		this.title = title;
 		this.isbn = isbn;
@@ -57,10 +57,10 @@ public class Book {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public int getIsbn() {
+	public String getIsbn() {
 		return isbn;
 	}
-	public void setIsbn(int isbn) {
+	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
 	public LocalDate getPublishDate() {
